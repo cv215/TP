@@ -22,11 +22,10 @@
     <div class="card">
       <img src="{{ product.image.url}}" alt="" class="card-ing-top">
       <div class="card-body">
-        <h5 class="card-title">{{ product.title }}</h5>
-        <p class="card-text">{{ product.description}}...</p>
+        <h5 id="aa{{ product.id }}" class="card-title">{{ product.title }}</h5>
         <p style="color: orange;" class="card-text">Prix: {{ product.price }} fr</p>
-        <button class="btn btn-warning">Détails</button>
-        <button class="btn btn-success">Ajouter</button>
+        <a href="{{ product.id }}" class="btn btn-warning">Détails</a>
+        <button id="{{ product.id }}" class="btn ted btn-success">Ajouter</button>
       </div>
     </div>
   </div>
@@ -55,3 +54,51 @@
   </div>
 </div>
 {% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+  console.log('juste pour tester');
+  if(localStorage.getItem('panier') == null){
+    var panier = {};
+  }else{
+    panier = JSON.parse(localStorage.getItem('panier'));
+  }
+  $(document).on('click','.ted', function(){
+    console.log('ajouter');
+    var item_id = this.id.toString();
+    console.log(item_id);
+    if(panier[item_id] != undefined){
+      quantite = panier[item_id][0]+1;
+      panier[item_id][0] = quantite  ;
+    }else{
+      quantite = 1;
+      nom = document.getElementById('aa' + item_id).innerHTML;
+      panier[item_id] = [quantite, nom];
+    }
+    localStorage.setItem('panier', JSON.stringify(panier));
+    console.log(panier);
+    document.getElementById('panier').innerHTML = "Panier(" + Object.keys(panier).length + ")";
+  });
+  AfficherList(panier);
+  function AfficherList(panier){
+    var panierString = "";
+    panierString+= "<h5>Voici votre panier</h5><br>";
+    var index=1;
+    for(var item in panier){
+      var quantite = panier[item][0];
+      panierString += index;
+      var nom = document.getElementById('aa' + item).innerHTML;
+      panierString += nom + " Qte : " + quantite + "<br>";
+      index += 1;
+    }
+    panierString += "<a href='/checkout' class='btn btn-primary'>Checkout</a>";
+ var panierBtn = document.getElementById('panier');
+ var popover = bootstrap.Popover.getInstance(panierBtn); 
+ if(popover){ 
+  popover.dispose(); 
+ } 
+ new bootstrap.Popover(panierBtn, { html: true, content: panierString });
+ }
+
+</script> 
+{% endblock%}

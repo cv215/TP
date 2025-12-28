@@ -1,0 +1,24 @@
+{% extends "shop/base.html" %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-6">
+    <h1>Détails du produit</h1>
+    <div class="card">
+      <img src="{{ product.image.url }}" alt="" width="500px" height="500px" class="card-img-top">
+    </div>
+  </div>
+  <div class="col-md-6">
+        <div class="text-warning display-3">
+            <h5 class="card-title">{{ product.title }}</h5>
+        </div>
+        <div class="text-danger">
+           Prix: {{ product.price }} fr
+        </div>
+        <div>
+            <p class="card-text">{{ product.description }}</p>
+        </div>
+        <a href=""><button class="btn btn-success">Acheter</button></a>
+  </div>
+</div>
+{% endblock %}
