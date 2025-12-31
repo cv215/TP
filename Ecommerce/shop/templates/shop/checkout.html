@@ -3,9 +3,25 @@
 {% block content %}
 <div class="row">
   <div class="col-md-12">
-<ul class="list-group" id="item-list">
+<!--<ul class="list-group" id="item-list">
     <h1 class="text-center">Voici la liste de vos articles</h1>
-</ul>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <b class="text-black">Articles </b>
+                            <b class="text-black">Quantites </b>
+                            <b class="text-black">Prix </b>
+                        </li>
+</ul> -->
+<table class="table table-bordered table-dark" id="item-list">
+   <h1 class="text-center">Voici la liste de vos articles</h1>
+  <thead>
+    <tr>
+      <th scope="col">Articles</th>
+      <th scope="col">Quantité</th>
+      <th scope="col">Prix unitaire</th>
+      <th scope="col">Prix total</th>
+    </tr>
+  </thead>
+</table>
   </div>
 </div>
 <div class="row">
@@ -67,25 +83,38 @@
     }
     var total = 0;
     var nombre = 0;
+    let itemString = "";
     for (var item in panier) {
         let quantite = panier[item][0];
         let nom = panier[item][1];
         let prix = panier[item][2];
         nombre += quantite;
         total += prix;
-        let itemString = `<li class="list-group-item d-flex justify-content-between align-items-center">
+       /* let itemString = `<li class="list-group-item d-flex justify-content-between align-items-center">
                             ${nom}
-                            <span class="badge bg-primary rounded-pill">QTE ${quantite}</span>
-                            <span class="badge bg-warning rounded-pill">Prix ${prix}fr</span>
-                        </li>`;
-        $('#item-list').append(itemString);
+                            <span class="badge bg-primary rounded-pill"> ${quantite}</span>
+                            <span class="badge bg-warning rounded-pill"> ${prix}fr</span>
+                        </li>`;*/
+       itemString += `<tr>
+      <td>${nom}</td>
+      <td><span class="badge bg-primary rounded-pill"> ${quantite}</span></td>
+      <td><span class="badge bg-warning rounded-pill"> ${prix}fr</span></td>
+      <td><span class="badge bg-warning rounded-pill"> ${prix * quantite}fr</span></td>
+    </tr>`;
     }
-     let itemNombre = `<li class="list-group-item d-flex justify-content-between align-items-center">
+     /*let itemNombre = `<li class="list-group-item d-flex justify-content-between align-items-center">
                             <b class="text-danger">PRIX ET QUANTITE TOTAL </b>
                             <span class="badge bg-danger rounded-pill">Total: ${nombre}</span>
                             <span class="badge bg-danger rounded-pill"> ${total}fr</span>
-                        </li>`;
-    $('#item-list').append(itemNombre);
+                        </li>`;*/
+    let itemNombre = `
+      <tr>
+      <td><b class="text-danger">PRIX TOTAL ET QUANTITE TOTAL </b></td>
+      <td><span class="badge bg-danger rounded-pill"> ${nombre}</span></td>
+      <td></td>
+      <td><span class="badge bg-danger rounded-pill"> ${total}fr</span></td>
+    </tr>`;
+    $('#item-list').append(`<tbody>${itemString}</tbody><tfoot>${itemNombre}</tfoot>`);
     $('#total').val(total + "fr");
     $('#items').val(JSON.stringify(panier));
 </script>

@@ -7,7 +7,7 @@ class Category(models.Model):
     class Meta:
         ordering = ['-date_added']
 
-    def _str_(self):
+    def __str__(self):
         return self.name
 
 
@@ -21,7 +21,7 @@ class Product(models.Model):
     class Meta:
         ordering = ['-date_added']
 
-    def _str_(self):
+    def __str__(self):
         return self.title
     
 class Commande(models.Model):
@@ -38,5 +38,5 @@ class Commande(models.Model):
     class Meta:
         ordering = ['-date_commande']
 
-    def _str_(self):
+    def __str__(self):
         return f'Commande de {self.nom} - {self.date_commande}'

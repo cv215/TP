@@ -1,5 +1,5 @@
 from itertools import product
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from .models import Product, Commande
 from django.core.paginator import Paginator
 
@@ -42,5 +42,12 @@ def checkout(request):
             zipcode=zipcode
         )
         com.save()
+        return redirect('confirmation')
 
     return render(request, 'shop/checkout.html')
+
+def confirmation(request):
+    info = Commande.objects.all()[:1]
+    for item in info:
+        nom = item.nom
+    return render(request, 'shop/confirmation.html', {'name': nom})
