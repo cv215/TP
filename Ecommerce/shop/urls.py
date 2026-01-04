@@ -1,5 +1,5 @@
 from django.urls import path
-from shop.views import checkout, confirmation, detail, index, login_user
+from shop.views import checkout, confirmation, detail, index, login_user, register_user
 
 urlpatterns = [
     path('', index, name='home'),
@@ -7,4 +7,5 @@ urlpatterns = [
     path('checkout', checkout, name="checkout"),
     path('confirmation', confirmation, name="confirmation"),
     path("login/", login_user, name="login"),
+     path("register/", register_user, name="register"),
 ]

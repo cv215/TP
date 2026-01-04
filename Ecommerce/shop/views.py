@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from .models import Product, Commande
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.contrib.auth.models import User
 
 # Create your views here.
 def index(request):
@@ -68,3 +69,24 @@ def login_user(request):
             messages.error(request, "Nom d'utilisateur ou mot de passe incorrect")
 
     return render(request, "shop/login.html")
+
+def register_user(request):
+    if request.method == "POST":
+        username = request.POST["username"]
+        email = request.POST["email"]
+        password1 = request.POST["password1"]
+        password2 = request.POST["password2"]
+
+        if password1 != password2:
+            messages.error(request, "Les mots de passe ne correspondent pas")
+            return redirect("register")
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Ce nom d'utilisateur existe déjà")
+            return redirect("register")
+
+        user = User.objects.create_user(username=username, email=email, password=password1)
+        user.save()
+        return redirect("login")
+
+    return render(request, "shop/register.html")
