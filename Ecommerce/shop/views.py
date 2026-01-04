@@ -1,6 +1,8 @@
 from itertools import product
 from django.shortcuts import redirect, render
+from django.contrib.auth import authenticate, login, logout
 from .models import Product, Commande
+from django.contrib import messages
 from django.core.paginator import Paginator
 
 # Create your views here.
@@ -51,3 +53,18 @@ def confirmation(request):
     for item in info:
         nom = item.nom
     return render(request, 'shop/confirmation.html', {'name': nom})
+
+def login_user(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect("home")
+        else:
+            messages.error(request, "Nom d'utilisateur ou mot de passe incorrect")
+
+    return render(request, "shop/login.html")
